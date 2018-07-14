@@ -3,6 +3,7 @@ const express= require('express');
 const app = express();
 const http = require('http').Server(app);
 const io = require('socket.io')(http);
+const {generarMensaje}= require('./generarMensaje');
 var puerto = process.env.PORT || 3000;
 
 
@@ -20,19 +21,13 @@ io.on('connect', function (socket) {
     })
 
     socket.on('nuevoUsuario',(res)=>{
-     socket.broadcast.emit('Bienvenida',{
-         res
-     });
+     socket.broadcast.emit('Bienvenida',generarMensaje('Eduardo','Bienvenido a el servicio de chat'));
     });
 
     socket.on('nuevoMensaje', (socket) => {
         console.log(socket);
 
-        io.emit('entregarMensaje',{
-            hora:new Date().getTime().toString(),
-            de: socket.de,
-            para: socket.para
-        })
+        io.emit('entregarMensaje',generarMensaje(socket.de,socket.para));
     })
 });
 
