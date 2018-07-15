@@ -17,18 +17,23 @@ io.on('connect', function (socket) {
     console.log('a user connected');
 
     socket.on('disconnect',() =>{
-        console.log('usuario desconectado');
+        console.log('Usuario desconectado.');
+       socket.broadcast.emit('usuarioDesconectado',generarMensaje('admin','Usuario desconectado.'));
     })
 
-    socket.on('nuevoUsuario',(res)=>{
-     socket.broadcast.emit('Bienvenida',generarMensaje('Eduardo','Bienvenido a el servicio de chat'));
-    });
+   
 
     socket.on('nuevoMensaje', (socket) => {
         console.log(socket);
 
-        io.emit('entregarMensaje',generarMensaje(socket.de,socket.para));
+        io.emit('entregarMensaje',generarMensaje(socket.de,socket.mensaje));
     })
+
+
+     socket.on('nuevoUsuario', (res) => {
+         socket.broadcast.emit('Bienvenida', generarMensaje('Admin', 'Un usuario ingreso al chat.'));
+     });
+
 });
 
 
