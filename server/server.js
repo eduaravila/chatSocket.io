@@ -3,7 +3,7 @@ const express= require('express');
 const app = express();
 const http = require('http').Server(app);
 const io = require('socket.io')(http);
-const {generarMensaje}= require('./generarMensaje');
+const {generarMensaje,generarUbicacion}= require('./generarMensaje');
 var puerto = process.env.PORT || 3000;
 
 
@@ -15,6 +15,12 @@ app.use(express.static(publicos));
 
 io.on('connect', function (socket) {
     console.log('a user connected');
+
+
+socket.on('crearUbicacion', (mes)=>{
+    console.log(mes.lat);
+    io.emit('recibirUbicacion', generarUbicacion('Usuario',mes.lat,mes.lon));
+});
 
     socket.on('disconnect',() =>{
         console.log('Usuario desconectado.');
