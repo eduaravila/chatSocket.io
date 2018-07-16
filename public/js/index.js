@@ -1,4 +1,5 @@
 var io = io();
+var botonCoor = $('#coordenada');
 io.on('connect', function (socket) {
     console.log('Conectado a el servidor');
 
@@ -11,7 +12,7 @@ io.on('connect', function (socket) {
     $('button#coordenada').on('click', () => {
         if ('geolocation' in navigator) {
             navigator.geolocation.getCurrentPosition(success, error);
-
+            botonCoor.attr('disabled',true).text('Cargando...');
         } else {
             alert('Geolocalizacion no soportada');
         }
@@ -78,6 +79,8 @@ function success(posision) {
     io.emit('crearUbicacion', {
         lat: posision.coords.latitude,
         lon: posision.coords.longitude
+    },function () {  
+        botonCoor.attr('disabled',false).text('Obtener ubicacion');
     });
 }
 

@@ -1,0 +1,116 @@
+
+$blanco: #ffffff
+$negro: #000000
+%estiloCuerpo 
+        display: flex
+        background-color: $blanco
+        margin: 0
+        width: 100%
+        height: 100vh
+
+
+%zonaChatE
+        display: flex
+        flex-direction: column
+        align-items: stretch
+        background-color: $blanco
+        height: 100%
+        flex: 4 1 90%
+        justify-content: center
+        text-align: left
+        overflow: scroll
+        
+%zonaSalasE
+        display: flex
+        background-color: #748BE4
+        height: 100vh
+        flex: 1 10 10%
+        text-align: center
+        justify-content: center
+    
+%mensajeHober
+        background: #fff
+
+%botonesEstilo
+        color:#fff
+        border: 0
+        font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif
+        height: 30px
+        background: #4465E6
+        align-self: center
+        border-radius: 5px
+        margin: 3px
+        transition: .5s all 
+        transition-timing-function: ease-in-out
+
+.dos
+        margin-left: 50% - 1%
+        font-family: 'Lobster', cursive !important
+        color: $negro !important
+.titulo
+        font-size:2em
+        text-transform: uppercase
+        justify-self: center
+        flex: 1 1 1
+        font-family: 'Comfortaa', cursive
+        color: $blanco
+
+#textos
+        height: 100%
+        background-color: $blanco
+        flex-basis: 90%
+#controles
+        position: fixed
+        bottom: 0
+        width: 100%
+        height: 10%
+        display: flex
+        align-items: center
+        background: #CBCEDA
+
+form#ingresarM
+        width: 90%
+        display: flex
+         background: #CBCEDA
+
+input#mensaje
+        flex-basis:90%
+        background: #CBCEDA
+        box-shadow: 0px 0px #fff
+        border: 0
+        height: 50px
+        flex-basis: 100%
+        margin: 3px
+        border-radius: 5px
+        transition-duration: .5
+        padding: 5px
+        
+
+
+input#mensaje:focus
+     @extend %mensajeHober
+
+button#coordenada
+        flex: 1 1 20%
+        
+body    
+        @extend %estiloCuerpo
+
+#zonaChat
+        @extend %zonaChatE
+    
+#zonaSalas
+        @extend %zonaSalasE
+
+.botones
+        @extend %botonesEstilo
+
+
+#lista
+        ul
+                font-family: 'PT Mono', monospace
+                margin: 5%
+
+.botones:disabled
+        background: grey
+        

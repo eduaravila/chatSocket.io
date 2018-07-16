@@ -17,9 +17,10 @@ io.on('connect', function (socket) {
     console.log('a user connected');
 
 
-socket.on('crearUbicacion', (mes)=>{
+socket.on('crearUbicacion', (mes,callback)=>{
     console.log(mes.lat);
     io.emit('recibirUbicacion', generarUbicacion('Usuario',mes.lat,mes.lon));
+    callback();
 });
 
     socket.on('disconnect',() =>{
