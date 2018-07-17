@@ -13,10 +13,9 @@ body {
   background-color: #ffffff;
   height: 100%;
   flex: 4 1 90%;
-  justify-content: space-between;
+  justify-content: center;
   text-align: left;
   overflow: scroll;
-  border-left: 10px solid #CACACA;
 }
 
 #zonaSalas {
@@ -40,12 +39,9 @@ input#mensaje:focus {
   background: #4465E6;
   align-self: center;
   border-radius: 5px;
-  margin: 1%;
+  margin: 3px;
   transition: 0.5s all;
   transition-timing-function: ease-in-out;
-  height: 100%;
-  min-height: 50px;
-  word-break: break-all;
 }
 
 .dos {
@@ -73,26 +69,29 @@ input#mensaje:focus {
   position: fixed;
   bottom: 0;
   width: 100%;
+  height: 10%;
   display: flex;
   align-items: center;
-  background: #CACACA;
+  background: #CBCEDA;
 }
 
 form#ingresarM {
   width: 90%;
   display: flex;
-  background: #CACACA;
+  display-background: #CBCEDA;
 }
 
 input#mensaje {
   flex-basis: 90%;
-  background: #CACACA;
+  background: #CBCEDA;
+  box-shadow: 0px 0px #fff;
   border: 0;
   height: 50px;
   flex-basis: 100%;
+  margin: 3px;
   border-radius: 5px;
   transition-duration: 0.5;
-  align-self: center;
+  padding: 5px;
 }
 
 button#coordenada {
@@ -101,15 +100,7 @@ button#coordenada {
 
 #lista ul {
   font-family: "PT Mono", monospace;
-  margin: 10%;
-  list-style: none;
-  word-break: break-all;
-}
-#lista ul li {
-  border: 0.5px solid #CACACA;
-  border-radius: 3px;
-  margin: 10px;
-  padding: 10px;
+  margin: 5%;
 }
 
 .botones:disabled {
@@ -117,57 +108,13 @@ button#coordenada {
 }
 
 .badge {
-  color: rgba(164, 170, 176, 0.5019607843);
-  border-radius: 50%;
+  color: white;
+  background-color: #0023AE;
+  border-radius: 40%;
   font-weight: bold;
-  padding: 2px;
-  font-size: 80%;
+  padding: 5px;
+  font-size: 50%;
   margin-top: 15px;
-  font-family: Courier New, Courier, monospace;
-}
-
-.tituloMensaje {
-  font-weight: bold;
-  font-size: 1.5em;
-  color: #000000;
-}
-
-@media screen and (max-width: 750px) {
-  #zonaChat {
-    width: 100%;
-    border: 0;
-  }
-
-  #zonaSalas {
-    display: none;
-  }
-
-  #controles {
-    justify-content: center;
-  }
-
-  form#ingresarM {
-    flex-direction: column;
-    border: 1px solid red;
-    height: 100%;
-    width: 100%;
-  }
-
-  .botones {
-    width: 100%;
-    height: 100%;
-  }
-
-  input#mensaje {
-    width: 100%;
-    margin: 0;
-    padding: 0;
-  }
-
-  ul {
-    margin-bottom: 20%;
-    padding-bottom: 30%;
-  }
 }
 
 /*# sourceMappingURL=index.css.map */

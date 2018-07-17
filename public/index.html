@@ -14,12 +14,13 @@
 
 <body>
 
-    <div id="zonaSalas"><h1 class='titulo'>Salas</h1></div>
+    <div id="zonaSalas">
+        <h1 class='titulo'>Salas</h1>
+    </div>
 
 
     <div id="zonaChat">
         <div id="textos">
-            <h1 class='titulo dos'>indice</h1>
             <div id="lista">
                 <ul id="mensajes">
 
@@ -31,16 +32,48 @@
             <form id="ingresarM">
                 <input type="text" name="mansaje" id="mensaje" placeholder="mensaje" autocomplete="off" autofocus>
                 <input type="submit" value="Enviar" class='botones'>
-<button type="button" id="coordenada" class='botones'>Obtener ubicacion</button>
+                <button type="button" id="coordenada" class='botones'>Obtener ubicacion</button>
 
             </form>
         </div>
 
 
     </div>
+    <script id='template-mensaje' type="text/template">
+
+        <li>
+            <div class='tituloMensaje'>
+                {{titulo}}
+                <i class="badge">{{hora}}</i>
+            </div>
+            <div>
+                <p id="mensajeRecibido">{{texto}}</p>
+            </div>
+        </li>
+
+    </script>
+
+
+    <script id='template-ubicacion' type="text/template">
+
+        <li>
+            <div class='tituloMensaje'>
+                {{titulo}}
+                <i class="badge">{{hora}}</i>
+            </div>
+            <div>
+                <a href="{{link}}" target="_blank">ubicacion actual</a>
+            </div>
+        </li>
+
+    </script>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.1/socket.io.js"></script>
     <script src="js/libs/jquery.js"></script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/lodash.js/0.10.0/lodash.min.js"></script>
     <script src="js/index.js"></script>
+    <script src="js/libs/moment.js"></script>
+    <script src="js/libs/mustache.js"></script>
 </body>
 
 </html>

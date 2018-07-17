@@ -43,8 +43,7 @@ input#mensaje:focus {
   margin: 1%;
   transition: 0.5s all;
   transition-timing-function: ease-in-out;
-  height: 100%;
-  min-height: 50px;
+  height: 20px;
   word-break: break-all;
 }
 
@@ -73,6 +72,7 @@ input#mensaje:focus {
   position: fixed;
   bottom: 0;
   width: 100%;
+  height: 10%;
   display: flex;
   align-items: center;
   background: #CACACA;
@@ -87,12 +87,15 @@ form#ingresarM {
 input#mensaje {
   flex-basis: 90%;
   background: #CACACA;
+  box-shadow: 0px 0px #fff;
   border: 0;
   height: 50px;
   flex-basis: 100%;
+  margin: 3px;
+  padding: 5px;
   border-radius: 5px;
   transition-duration: 0.5;
-  align-self: center;
+  margin: 0 3% 0 3%;
 }
 
 button#coordenada {
@@ -101,15 +104,8 @@ button#coordenada {
 
 #lista ul {
   font-family: "PT Mono", monospace;
-  margin: 10%;
+  margin: 5%;
   list-style: none;
-  word-break: break-all;
-}
-#lista ul li {
-  border: 0.5px solid #CACACA;
-  border-radius: 3px;
-  margin: 10px;
-  padding: 10px;
 }
 
 .botones:disabled {
@@ -132,42 +128,4 @@ button#coordenada {
   color: #000000;
 }
 
-@media screen and (max-width: 750px) {
-  #zonaChat {
-    width: 100%;
-    border: 0;
-  }
-
-  #zonaSalas {
-    display: none;
-  }
-
-  #controles {
-    justify-content: center;
-  }
-
-  form#ingresarM {
-    flex-direction: column;
-    border: 1px solid red;
-    height: 100%;
-    width: 100%;
-  }
-
-  .botones {
-    width: 100%;
-    height: 100%;
-  }
-
-  input#mensaje {
-    width: 100%;
-    margin: 0;
-    padding: 0;
-  }
-
-  ul {
-    margin-bottom: 20%;
-    padding-bottom: 30%;
-  }
-}
-
-/*# sourceMappingURL=index.css.map */
+/*# sourceMappingURL=index.scss.map */

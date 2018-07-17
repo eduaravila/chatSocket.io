@@ -1,8 +1,9 @@
+const moment = require('moment')();
 let generarMensaje = (de, mensaje) => {
     return {
         de,
         mensaje,
-        hora: new Date().getTime()
+        hora: moment.valueOf()
     }
 };
 
@@ -11,7 +12,7 @@ let generarUbicacion = (de, lat, lon) => {
         de,
         lat,
         lon,
-        hora: new Date().getTime(),
+        hora: moment.valueOf(),
         link: `https://www.google.com.mx/maps/?q=${lat},${lon}`
     }
 
