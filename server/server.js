@@ -6,7 +6,10 @@ const http = require('http').Server(app);
 const io = require('socket.io')(http);
 const _ = require('lodash');
 const {
-    mongoose9
+    toolsUsuarios
+} = require('./utils/listadoUsuarios');
+const {
+    mongoose
 } = require('./db/conexion');
 const {
     usuario
@@ -31,34 +34,32 @@ const {
     desifraToken
 } = require('./utils/webTokens'); //! genera web token para as cookies encriptadas
 let publicos = path.join(__dirname, '../public');
+let listaUsuarios = new toolsUsuarios();
+
 console.log(publicos);
 app.use(express.static(publicos));
 app.use(cookie_parser());
+/**
+ * TODO: AGREGAR LA COMPROBACION DE INICIO DE SESION EN EL INDEX ES DECIR SABER I YA INICIO SESION Y TRATA DE VOLVER A LOGIN LO REDIGUE DE NUEVO A LA SALA DE CHAT HASTA QUE EL USUARIO TERMINE LA SESION
+ * ! REPARAR DEPENDENCIAS 
+ */
 
-// app.use((req,res,next)=>{
-// console.log('cookies',req.cookies);
-// if(req.cookies.ingreso){
-//     console.log('ingreso');
-// }
-// else{
-//     console.log('iniciar sesion');
-// }
-// next();
-// })
+
+
+
 app.get('/ingresar', (req, res, next) => {
 
-    var objeto = _.pick(req.query, ['usuario', 'contrasenia']); //? solo toma los valores que estan en el formulario no mas
-    if (stringReal(objeto.usuario) && stringReal(objeto.contrasenia)) {
+    var objeto = _.pick(req.query, ['usuario', 'contrasenia', 'room']); //? solo toma los valores que estan en el formulario no mas
+    if (stringReal(objeto.usuario) && stringReal(objeto.contrasenia) && stringReal(objeto.room)) {
 
 
 
         usuario.comprobar(objeto.usuario, objeto.contrasenia)
             .then((result) => {
-                res.cookie('usuario', generarToken(result.usuario, objeto.contrasenia, true), {
+                res.cookie('usuario', generarToken(result.usuario, objeto.contrasenia, true, objeto.room), {
                     maxAge: 900000
                 });
-                res.setHeader('usuarioDos', result.usuario);
-                res.header('usuarioUno', result.usuario);
+
                 res.redirect('/chat.html');
 
             }).catch((err) => {
@@ -73,13 +74,21 @@ app.get('/ingresar', (req, res, next) => {
 
 io.on('connect', function (socket) {
 
-
+    console.log(socket.id);
     socket.on('join', (datos, callback) => {
+
         desifraToken(datos.usuario).then(token => {
                 if (!token.ingreso) {
                     callback('sesion caduca');
                 } else {
-                    console.log('correcto');
+
+                    socket.join(token.sala);
+                    listaUsuarios.agregarUsuario(socket.id, token.usuario, token.sala);
+
+                    io.to(token.sala).emit('actualizarLista', listaUsuarios.todosUsuario(token.sala));
+                    console.log(listaUsuarios.todosUsuario(token.sala));
+                    socket.broadcast.to(token.sala).emit('Bienvenida', generarMensaje('Admin', `${token.usuario} ingreso a la sala.`)); //? envia el mensaje a todos los usuarios menos a el usuario que ingreso a la sala
+
                 }
             })
             .catch(err => {
@@ -90,14 +99,27 @@ io.on('connect', function (socket) {
 
 
     socket.on('crearUbicacion', (mes, callback) => {
+        desifraToken(mes.usuario)
+        .then((result) => {
         console.log(mes.lat);
+        io.to(result.sala).emit('recibirUbicacion', generarUbicacion(result.usuario, mes.lat, mes.lon));    
         callback();
-        io.emit('recibirUbicacion', generarUbicacion('Usuario', mes.lat, mes.lon));
+        }).catch((err) => {
+            
+        });
+        
     });
 
     socket.on('disconnect', () => {
         console.log('Usuario desconectado.');
-        socket.broadcast.emit('usuarioDesconectado', generarMensaje('admin', 'Usuario desconectado.'));
+        var eliminado = listaUsuarios.eliminarUsuario(socket.id);
+        console.log('eliminado',eliminado);
+        if (eliminado) {
+            io.to(eliminado.room).emit('actualizarLista', listaUsuarios.todosUsuario(eliminado.room));
+            io.to(eliminado.room).emit('entregarMensaje', generarMensaje('admin', `${eliminado.usuario} abandono la sala.`));
+        }
+
+
     })
 
 
@@ -105,12 +127,19 @@ io.on('connect', function (socket) {
     socket.on('nuevoMensaje', (socket) => {
         console.log(socket);
 
-        io.emit('entregarMensaje', generarMensaje(socket.de, socket.mensaje));
+        desifraToken(socket.de)
+            .then((result) => {
+                io.to(result.sala).emit('entregarMensaje', generarMensaje(result.usuario, socket.mensaje));
+            }).catch((err) => {
+                io.emit('entregarMensaje', generarMensaje('desconocido', socket.mensaje));
+
+            });
+
     })
 
 
     socket.on('nuevoUsuario', (res) => {
-        socket.broadcast.emit('Bienvenida', generarMensaje('Admin', 'Un usuario ingreso al chat.'));
+
     });
 
 });

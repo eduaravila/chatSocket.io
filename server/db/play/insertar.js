@@ -8,9 +8,19 @@ let bcrypt = require('bcryptjs');
 
 let eduardo = new usuario({
     usuario: 'eduardo',
-    password: '123456789'
+    password: '12345678'
+})
+let pepe = new usuario({
+    usuario: 'pepe',
+    password:'12345678'
+});
+let helio = new usuario({
+    usuario: 'helio',
+    password: '12345678'
 })
 
+pepe.save()
+helio.save();
 eduardo.save()
     .then((result) => {
         console.log(result);

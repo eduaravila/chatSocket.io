@@ -2,8 +2,8 @@ let jwt = require('jsonwebtoken');
 
 
 
-let generarToken = (usuario,pass,ingreso)=>{
- return jwt.sign({usuario,pass,ingreso},'secreto')
+let generarToken = (usuario,pass,ingreso,sala)=>{
+ return jwt.sign({usuario,pass,ingreso,sala},'secreto')
 
 }
 let desifraToken = (token)=>{

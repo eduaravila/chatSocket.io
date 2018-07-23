@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title></title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="css/index.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href="https://fonts.googleapis.com/css?family=PT+Mono" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Comfortaa|PT+Mono" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Lobster" rel="stylesheet">
+</head>
+
+<body>
+
+    <div id="zonaSalas">
+        <div class="top">
+            <h1 class='titulo'>Salas</h1>
+        </div>
+
+        <div class="usuarios">
+          <ol>
+              <li>hola</li>
+          </ol>
+        </div>
+    </div>
+
+
+    <div id="zonaChat">
+        <div id="textos">
+            <div id="lista">
+                <ul id="mensajes">
+
+                </ul>
+            </div>
+        </div>
+
+        <div id="controles">
+            <form id="ingresarM">
+                <input type="text" name="mansaje" id="mensaje" placeholder="mensaje" autocomplete="off" autofocus>
+                <input type="submit" value="Enviar" class='botones'>
+                <button type="button" id="coordenada" class='botones'>Obtener ubicacion</button>
+
+            </form>
+        </div>
+
+
+    </div>
+    <script id='template-mensaje' type="text/template">
+
+        <li>
+            <div class='tituloMensaje'>
+                {{titulo}}
+                <i class="badge">{{hora}}</i>
+            </div>
+            <div>
+                <p id="mensajeRecibido">{{texto}}</p>
+            </div>
+        </li>
+
+    </script>
+
+
+    <script id='template-ubicacion' type="text/template">
+
+        <li>
+            <div class='tituloMensaje'>
+                {{titulo}}
+                <i class="badge">{{hora}}</i>
+            </div>
+            <div>
+                <a href="{{link}}" target="_blank">ubicacion actual</a>
+            </div>
+        </li>
+
+    </script>
+
+    <script src="js/libs/socket.io.js"></script>
+    <script src="js/libs/jquery.js"></script>
+    <script type="text/javascript" src="js/libs/lodash.js"></script>
+    <script src="js/chat.js"></script>
+    <script src="js/libs/moment.js"></script>
+    <script src="js/libs/mustache.js"></script>
+</body>
+
+</html>
