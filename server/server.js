@@ -1,5 +1,6 @@
 const path = require('path'); //rutas entre archivos 
 const express = require('express');
+const config = require('./configuracion/config')
 const app = express();
 const cookie_parser = require('cookie-parser'); //? convierte cookies en objetos
 const http = require('http').Server(app);

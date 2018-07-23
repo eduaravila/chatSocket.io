@@ -10,3 +10,4 @@ if(env === 'desarrollo' || env === 'test'){
         process.env[element] = entorno[element];
     });
 }
+
