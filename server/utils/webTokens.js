@@ -3,12 +3,12 @@ let jwt = require('jsonwebtoken');
 
 
 let generarToken = (usuario,pass,ingreso,sala)=>{
- return jwt.sign({usuario,pass,ingreso,sala},'secreto')
+ return jwt.sign({usuario,pass,ingreso,sala},process.env.SECRETO)
 
 }
 let desifraToken = (token)=>{
     try{
-    var info = jwt.verify(token,'secreto');
+    var info = jwt.verify(token,process.env.SECRETO);
     }
     catch(e){
         return Promise.reject('Token invalido')

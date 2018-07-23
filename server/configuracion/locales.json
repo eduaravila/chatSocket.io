@@ -1,0 +1,13 @@
+{
+    "test": {
+        "MONGODB_URI": "mongodb://localhost:27017/chatTEST",
+        "PORT": 3000,
+        "SECRETO": "qwndkjdnqwkn13nfkjenf"
+    },
+
+    "desarollo": {
+        "MONGODB_URI": "mongodb://localhost:27017/chat",
+        "PORT": 3000,
+        "SECRETO": "qwndkjdnqwkn13nfkjenf"
+    }
+}
