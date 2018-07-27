@@ -48,73 +48,73 @@ app.use(cookie_parser());
 
 
 
-app.get('/ingresar', (req, res, next) => {
+app.get('/ingresar', async (req, res, next) => {
 
     var objeto = _.pick(req.query, ['usuario', 'contrasenia', 'room']); //? solo toma los valores que estan en el formulario no mas
     if (stringReal(objeto.usuario) && stringReal(objeto.contrasenia) && stringReal(objeto.room)) {
 
 
-
-        usuario.comprobar(objeto.usuario, objeto.contrasenia)
-            .then((result) => {
-                res.cookie('usuario', generarToken(result.usuario, objeto.contrasenia, true, objeto.room), {
-                    maxAge: 900000
-                });
-
-                res.redirect('/chat.html');
-
-            }).catch((err) => {
-                console.log(err);
-                res.redirect('/');
+        try {
+            const result = await usuario.comprobar(objeto.usuario, objeto.contrasenia)
+            res.cookie('usuario', generarToken(result.usuario, objeto.contrasenia, true, objeto.room), {
+                maxAge: 900000
             });
+
+            res.redirect('/chat.html');
+        } catch (e) {
+            res.redirect('/');
+        }
+
     } else {
         res.redirect('/');
     }
 });
 
 
-io.on('connect', function (socket) {
+io.on('connect', (socket)=> {
 
     console.log(socket.id);
-    socket.on('join', (datos, callback) => {
+    socket.on('join',async (datos, callback) => {
 
-        desifraToken(datos.usuario).then(token => {
-                if (!token.ingreso) {
-                    callback('sesion caduca');
-                } else {
+        try {
+            let token = await desifraToken(datos.usuario);
 
-                    socket.join(token.sala);
-                    listaUsuarios.agregarUsuario(socket.id, token.usuario, token.sala);
+            if (!token.ingreso) {
+                callback('sesion caduca');
+            } else {
 
-                    io.to(token.sala).emit('actualizarLista', listaUsuarios.todosUsuario(token.sala));
-                    console.log(listaUsuarios.todosUsuario(token.sala));
-                    socket.broadcast.to(token.sala).emit('Bienvenida', generarMensaje('Admin', `${token.usuario} ingreso a la sala.`)); //? envia el mensaje a todos los usuarios menos a el usuario que ingreso a la sala
+                socket.join(token.sala);
+                listaUsuarios.agregarUsuario(socket.id, token.usuario, token.sala);
 
-                }
-            })
-            .catch(err => {
-                callback('no se inicio sesion')
-            })
+                io.to(token.sala).emit('actualizarLista', listaUsuarios.todosUsuario(token.sala));
+                console.log(listaUsuarios.todosUsuario(token.sala));
+                socket.broadcast.to(token.sala).emit('Bienvenida', generarMensaje('Admin', `${token.usuario} ingreso a la sala.`)); //? envia el mensaje a todos los usuarios menos a el usuario que ingreso a la sala
+
+            }
+        } catch (e) {
+            callback('no se inicio sesion');
+        }
+
 
     })
 
 
-    socket.on('crearUbicacion', (mes, callback) => {
-        desifraToken(mes.usuario)
-        .then((result) => {
-        console.log(mes.lat);
-        io.to(result.sala).emit('recibirUbicacion', generarUbicacion(result.usuario, mes.lat, mes.lon));    
-        callback();
-        }).catch((err) => {
-            
-        });
-        
+    socket.on('crearUbicacion', async (mes, callback) => {
+        try {
+            let result = desifraToken(mes.usuario)
+            console.log(mes.lat);
+            io.to(result.sala).emit('recibirUbicacion', generarUbicacion(result.usuario, mes.lat, mes.lon));
+            callback();
+        } catch (e) {
+
+        }
+
     });
 
     socket.on('disconnect', () => {
         console.log('Usuario desconectado.');
         var eliminado = listaUsuarios.eliminarUsuario(socket.id);
-        console.log('eliminado',eliminado);
+        console.log('eliminado', eliminado);
         if (eliminado) {
             io.to(eliminado.room).emit('actualizarLista', listaUsuarios.todosUsuario(eliminado.room));
             io.to(eliminado.room).emit('entregarMensaje', generarMensaje('admin', `${eliminado.usuario} abandono la sala.`));
@@ -125,26 +125,27 @@ io.on('connect', function (socket) {
 
 
 
-    socket.on('nuevoMensaje', (socket) => {
+    socket.on('nuevoMensaje', async (socket) => {
         console.log(socket);
+        try {
+            let result = await desifraToken(socket.de)
 
-        desifraToken(socket.de)
-            .then((result) => {
-                io.to(result.sala).emit('entregarMensaje', generarMensaje(result.usuario, socket.mensaje));
-            }).catch((err) => {
-                io.emit('entregarMensaje', generarMensaje('desconocido', socket.mensaje));
+            io.to(result.sala).emit('entregarMensaje', generarMensaje(result.usuario, socket.mensaje));
 
-            });
+        } catch (e) {
+            io.emit('entregarMensaje', generarMensaje('desconocido', socket.mensaje));
+
+        }
 
     })
 
 
-    socket.on('nuevoUsuario', (res) => {
-
-    });
-
 });
-
+app.get('/lista', (req, res) => {
+    console.log('click');
+    console.log(listaUsuarios.usuariosRoom());
+res.send(listaUsuarios.usuariosRoom());
+});
 
 http.listen(puerto, () => {
     console.log(`Escuchando desde el puerto ${puerto}`);

@@ -119,6 +119,7 @@ $('#mensajes').text('Hola que tal');
 
 // };
 
+
 function success(posision) {
     io.emit('crearUbicacion', {
         lat: posision.coords.latitude,

@@ -17,10 +17,19 @@
             <label for="contrasenia">Contraseñia</label>
             <input type="password" name="contrasenia" id="contrasenia" placeholder="contraseñia super secreta">
             <label for="room">Sala</label>
-            <input type="text" name="room" id="room" placeholder="Sala de chat">
+            
+            <input list='cuartos' id='disponibles' name='room'>
+            <datalist id='cuartos'>
+            </datalist>
+
             <input type="submit" value="Ingresar" class="boton">
         </form>
     </div>
+    <script src="js/libs/jquery.js"></script>
+    <script type="text/javascript" src="js/libs/lodash.js"></script>
+    <script src="js/index.js"></script>
+    <script src="js/libs/moment.js"></script>
+    <script src="js/libs/mustache.js"></script>
 </body>
 
 </html>
