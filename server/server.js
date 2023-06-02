@@ -50,13 +50,10 @@ app.use(cookie_parser());
 
 app.get('/ingresar', async (req, res, next) => {
 
-    var objeto = _.pick(req.query, ['usuario', 'contrasenia', 'room']); //? solo toma los valores que estan en el formulario no mas
-    if (stringReal(objeto.usuario) && stringReal(objeto.contrasenia) && stringReal(objeto.room)) {
-
-
-        try {
-            const result = await usuario.comprobar(objeto.usuario, objeto.contrasenia)
-            res.cookie('usuario', generarToken(result.usuario, objeto.contrasenia, true, objeto.room), {
+    var objeto = _.pick(req.query, ['usuario', 'room']); //? solo toma los valores que estan en el formulario no mas
+    if (stringReal(objeto.usuario) && stringReal(objeto.room)) {
+        try {            
+            res.cookie('usuario', generarToken(objeto.usuario, "", true, objeto.room), {
                 maxAge: 900000
             });
 
@@ -102,7 +99,6 @@ io.on('connect', (socket)=> {
     socket.on('crearUbicacion', async (mes, callback) => {
         try {
             let result = desifraToken(mes.usuario)
-            console.log(mes.lat);
             io.to(result.sala).emit('recibirUbicacion', generarUbicacion(result.usuario, mes.lat, mes.lon));
             callback();
         } catch (e) {
