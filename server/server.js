@@ -10,9 +10,6 @@ const {
     toolsUsuarios
 } = require('./utils/listadoUsuarios');
 const {
-    mongoose
-} = require('./db/conexion');
-const {
     usuario
 } = require('./db/models/usuarios');
 const {
@@ -37,7 +34,6 @@ const {
 let publicos = path.join(__dirname, '../public');
 let listaUsuarios = new toolsUsuarios();
 
-console.log(publicos);
 app.use(express.static(publicos));
 app.use(cookie_parser());
 /**
@@ -138,9 +134,7 @@ io.on('connect', (socket)=> {
 
 });
 app.get('/lista', (req, res) => {
-    console.log('click');
-    console.log(listaUsuarios.usuariosRoom());
-res.send(listaUsuarios.usuariosRoom());
+    res.send(listaUsuarios.usuariosRoom());
 });
 
 http.listen(puerto, () => {
